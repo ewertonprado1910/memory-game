@@ -1,19 +1,12 @@
-import { router } from "expo-router"
-import { Text, TouchableOpacity } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { useAuthStore } from "@/shared/stores/auth.store"
+import { Redirect } from "expo-router"
 
 
 export default function Index() {
-    return (
+    const { user } = useAuthStore()
 
-        <SafeAreaView style={{ alignItems: "center", marginTop: 50 }}>
-            <Text>Tela Index Home</Text>
-
-            <TouchableOpacity onPress={() => router.push("/(private)/game")}>
-                <Text>Botão</Text>
-            </TouchableOpacity>
-
-        </SafeAreaView>
-
-    )
+    if (user) {
+        return <Redirect href={"/(private)/home"} />
+    }
+    return <Redirect href={"/(public)/login"} />
 }
