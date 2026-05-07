@@ -1,14 +1,15 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { Pressable, StyleSheet, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 
 import { colors } from "@/constants/colors"
 import { AppText } from "@/shared/components/AppText"
-import { getDifficultyColor } from "@/shared/utils/difficulty"
-import { DifficultyView } from "./DifficultyIcon/DifficultyIcon.view"
+import Animated from "react-native-reanimated"
+import { DifficultyTab } from "./DifficultyTab"
 import { useDifficultyViewModel } from "./useDifficultySelecion.viewModel"
 
 export const DifficultySelectionView = () => {
-    const { diffculties } = useDifficultyViewModel()
+    const { diffculties, selectedDifficulty, setSelectedDifficulty, animatedStyle } =
+        useDifficultyViewModel()
 
     return (
         <View style={styles.difficultySelection}>
@@ -18,28 +19,22 @@ export const DifficultySelectionView = () => {
                     <MaterialCommunityIcons
                         name="clock-outline"
                         size={20}
-                        color={colors.accent.green}
+                        color={colors.feedback.info}
                     />
                     <AppText>5 min</AppText>
                 </View>
             </View>
 
             <View style={styles.difficultyTabs}>
+                <Animated.View style={[styles.indicator, animatedStyle]} />
                 {diffculties.map((difficulty, index) => (
-                    <Pressable
-                        style={styles.difficultyTab}
-                        key={`difficulty-key-${index}`}>
-
-                        <DifficultyView
-                            difficulty={difficulty}
-                            color={getDifficultyColor(difficulty)}
-                            inactiveColor={colors.grayscale.gray200}
-                            isSelected
-                        />
-                        <AppText >
-                            {difficulty}
-                        </AppText>
-                    </Pressable>
+                    <DifficultyTab
+                        key={`difficulty-tab-${index}`}
+                        difficulty={difficulty}
+                        index={index}
+                        isSelected={selectedDifficulty === difficulty}
+                        setSelectedDifficulty={setSelectedDifficulty}
+                    />
                 ))}
             </View>
         </View>
@@ -56,11 +51,6 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         marginBottom: 16
     },
-    difficultyLabel: {
-        fontSize: 16,
-        fontWeight: "400",
-        color: colors.grayscale.gray200
-    },
     timeIndicator: {
         flexDirection: "row",
         alignItems: "center",
@@ -76,21 +66,19 @@ export const styles = StyleSheet.create({
         padding: 4,
         position: "relative",
         borderColor: colors.grayscale.gray400,
-        borderWidth: 1
+        borderWidth: 1,
     },
-    difficultyTab: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "center",
-        paddingVertical: 12,
+    indicator: {
+        position: "absolute",
+        width: "33.33%",
+        top: 4,
+        zIndex: 0,
         borderRadius: 100,
-        gap: 6,
-        zIndex: 1
-    },
-    difficultyBadge: {
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        borderRadius: 20
+        left: 0,
+        bottom: 4,
+        backgroundColor: colors.grayscale.gray500,
+        borderColor: colors.grayscale.gray400,
+        borderWidth: 1,
+        marginLeft: 4
     }
-
 })
