@@ -1,12 +1,16 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { router } from "expo-router"
 import { FC } from "react"
-import { Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native"
+import Animated from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
 
+import { useInputFocusAnimation } from "@/animations/hooks/useInputFocusAnimation"
+import { usePressAnimations } from "@/animations/hooks/usePressAnimation"
 import { colors, gradients } from "@/constants/colors"
+import { AppText } from "@/shared/components/AppText"
 import { useAuthViewModel } from "./useAuth.viewModel"
 
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
 export const LoginView: FC<ReturnType<typeof useAuthViewModel>> = ({
     userName,
@@ -14,59 +18,76 @@ export const LoginView: FC<ReturnType<typeof useAuthViewModel>> = ({
     handleSubmit
 }) => {
 
+    const handleSubmitPressAnimation = usePressAnimations()
+    const animatedTextInputFocus = useInputFocusAnimation()
+
     return (
-        <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView
-            style={{flex: 1}}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            >
-            <View style={styles.content}>
-                <View style={styles.logoContainer}>
-                    <Image style={styles.logo}
-                        source={require("@/assets/logo-game.png")}
-                        resizeMode="contain"
-                    />
-                </View>
+        <TouchableWithoutFeedback
+            style={{ flex: 1 }}
+            onPress={Keyboard.dismiss}
+        >
+            <SafeAreaView style={styles.container}>
+                <KeyboardAvoidingView
+                    style={{ flex: 1 }}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                >
+                    <View style={styles.content}>
+                        <View style={styles.logoContainer}>
+                            <Image style={styles.logo}
+                                source={require("@/assets/logo-game.png")}
+                                resizeMode="contain"
+                            />
+                        </View>
 
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>
-                        memory game
-                    </Text>
+                        <View style={styles.titleContainer}>
+                            <AppText style={styles.title}>
+                                memory game
+                            </AppText>
 
-                    <Text style={styles.subTitle}>
-                        Teste sua memória enquanto aprende!
-                    </Text>
-                </View>
+                            <AppText style={styles.subTitle}>
+                                Teste sua memória enquanto aprende!
+                            </AppText>
+                        </View>
 
-                <View style={styles.formContainer}>
-                    <TextInput
-                        onChangeText={setUserName}
-                        value={userName}
-                        style={styles.input}
-                        placeholder="Digite seu nome"
-                        placeholderTextColor={colors.grayscale.gray300}
-                        autoCapitalize="words"
-                        returnKeyType="done"
-                    />
+                        <View style={styles.formContainer}>
+                            <AnimatedTextInput
+                                onChangeText={setUserName}
+                                value={userName}
+                                style={[styles.input, animatedTextInputFocus.animatedStyle]}
+                                placeholder="Digite seu nome"
+                                placeholderTextColor={colors.grayscale.gray300}
+                                autoCapitalize="words"
+                                returnKeyType="done"
+                                onFocus={animatedTextInputFocus.onFocus}
+                                onBlur={animatedTextInputFocus.onBlur}
+                            />
 
-                    <LinearGradient
-                        colors={gradients.colorful}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 2 }}
-                        style={[styles.buttonGradient, styles.buttonGlow]}
-                    >
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => router.push("/(private)/home")}>
-                            <Text style={styles.buttonText}>
-                                Entrar
-                            </Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
-                </View>
-            </View>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+                            <Animated.View
+                                style={handleSubmitPressAnimation.animatedStyle}
+                            >
+                                <LinearGradient
+                                    colors={gradients.colorful}
+                                    start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 2 }}
+                                    style={[styles.buttonGradient, styles.buttonGlow]}
+                                >
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={handleSubmit}
+                                        onPressIn={handleSubmitPressAnimation.onPressIn}
+                                        onPressOut={handleSubmitPressAnimation.onPressOut}
+                                    >
+                                        <Text style={styles.buttonText}>
+                                            Entrar
+                                        </Text>
+                                    </TouchableOpacity>
+                                </LinearGradient>
+                            </Animated.View>
+                        </View>
+                    </View>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -94,13 +115,14 @@ const styles = StyleSheet.create({
     },
     title: {
         color: colors.grayscale.gray100,
-        fontSize: 28,
-        fontWeight: "bold"
+        fontSize: 30,
+        fontWeight: "bold",
+        fontFamily: "Baloo2_800ExtraBold"
     },
     subTitle: {
         color: colors.grayscale.gray200,
         fontSize: 16,
-        marginBottom: 40
+        marginBottom: 40,
     },
     formContainer: {
         width: "100%",
