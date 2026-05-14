@@ -1,9 +1,9 @@
 import { colors } from "@/constants/colors"
-import { AppText } from "@/shared/components/AppText"
 import { FC } from "react"
 import { StyleSheet, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { HomeHeader } from "./components"
+import { ChallangeList } from "./components/ChallangeList"
 import { DifficultySelectionView } from "./components/DifficultySelection/DifficultySelection.view"
 import { useHomeViewModel } from "./useHome.viewModel"
 
@@ -19,7 +19,7 @@ export const HomeView: FC<ReturnType<typeof useHomeViewModel>> = ({
                 style={styles.content}  >
                 <HomeHeader />
                 <DifficultySelectionView />
-                <AppText>Home</AppText>
+                <ChallangeList />
             </View>
         </SafeAreaView>
 
