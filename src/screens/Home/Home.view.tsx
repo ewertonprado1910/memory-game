@@ -1,5 +1,4 @@
 import { colors } from "@/constants/colors"
-import { FC } from "react"
 import { StyleSheet, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { HomeHeader } from "./components"
@@ -8,9 +7,9 @@ import { DifficultySelectionView } from "./components/DifficultySelection/Diffic
 import { useHomeViewModel } from "./useHome.viewModel"
 
 
-export const HomeView: FC<ReturnType<typeof useHomeViewModel>> = ({
+export const HomeView = () => {
+    const viewModel = useHomeViewModel()
 
-}) => {
     return (
         <SafeAreaView
             style={styles.container}
@@ -18,8 +17,12 @@ export const HomeView: FC<ReturnType<typeof useHomeViewModel>> = ({
             <View
                 style={styles.content}  >
                 <HomeHeader />
-                <DifficultySelectionView />
-                <ChallangeList />
+                <DifficultySelectionView
+                    {...viewModel}
+                />
+                <ChallangeList
+                    handleSelectChallange={viewModel.handleSelectChallange}
+                />
             </View>
         </SafeAreaView>
 

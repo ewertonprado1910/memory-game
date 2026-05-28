@@ -40,7 +40,7 @@ export class CardService {
         const cards: StoreCard[] = []
 
         challange.cards.forEach((cardItem, index) => {
-            const [card1, card2] = this.createCardPair(cardItem, index)
+            const [card1, card2] = CardService.createCardPair(cardItem, index)
             cards.push(card1, card2)
         })
 

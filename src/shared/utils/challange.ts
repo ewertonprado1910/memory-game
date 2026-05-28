@@ -78,20 +78,45 @@ export const challangeTheme: ChallangeTheme[] = [
   },
 ]
 
+export interface DifficultyConfing {
+  difficulty: Difficulty
+  timeLimit: number
+  estimatedTime: string
+}
+
+export const difficultyConfings: Record<Difficulty, DifficultyConfing> = {
+  Fácil: {
+    difficulty: "Fácil",
+    timeLimit: 300,
+    estimatedTime: "5 min"
+  },
+  Médio: {
+    difficulty: "Médio",
+    timeLimit: 240,
+    estimatedTime: "4 min"
+  },
+  Difícil: {
+    difficulty: "Difícil",
+    timeLimit: 30,
+    estimatedTime: "3 min"
+  }
+}
+
 
 export type GameStatus =
   | "idle"
   | "countdown"
-  | "plying"
-  | "pausado"
+  | "playing"
+  | "paused"
   | "finished"
   | "timeout"
 
 export interface Challange {
   id: string
   title: string
-  difficulty: Difficulty
-  timeLimit: number
+  difficulty: Difficulty,
+  estimatedTime: string,
+  timeLimit: number,
   cards: CardItem[]
   gradient?: [string, string]
 }

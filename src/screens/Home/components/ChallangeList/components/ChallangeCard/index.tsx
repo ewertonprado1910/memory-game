@@ -10,41 +10,47 @@ import { ChallangeTheme } from "@/shared/utils/challange"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 
-export const ChallangeCard: FC<ChallangeTheme> = ({
-    arrowColor,
-    cards,
-    gradient,
-    id,
-    title
-}) => {
+export const ChallangeCard: FC<
+    ChallangeTheme & {
+        handleSelectChallange: (challangeId: string) => void
+    }> = ({
+        arrowColor,
+        cards,
+        gradient,
+        id,
+        title,
+        handleSelectChallange
+    }) => {
 
-    const pressAnimated = usePressAnimations()
+        const pressAnimated = usePressAnimations()
 
-    return (
-        <LinearGradient
-            colors={gradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.challangeCard}
-        >
-            <Animated.View style={pressAnimated.animatedStyle}>
-                <Pressable
-                    onPressIn={pressAnimated.onPressIn}
-                    onPressOut={pressAnimated.onPressOut}
-                    style={styles.challangeContent}>
-                    <AppText style={styles.challangeTitle}>{title}</AppText>
+        return (
+            <LinearGradient
+                colors={gradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.challangeCard}
+            >
+                <Animated.View style={pressAnimated.animatedStyle}>
+                    <Pressable
+                        onPressIn={pressAnimated.onPressIn}
+                        onPressOut={pressAnimated.onPressOut}
+                        style={styles.challangeContent}
+                        onPress={() => handleSelectChallange(id)}
+                    >
+                        <AppText style={styles.challangeTitle}>{title}</AppText>
 
-                    <View style={[styles.arrowIcon, { backgroundColor: arrowColor }]}>
-                        <MaterialCommunityIcons
-                            name="arrow-right"
-                            size={23}
-                        />
-                    </View>
-                </Pressable>
-            </Animated.View>
-        </LinearGradient>
-    )
-}
+                        <View style={[styles.arrowIcon, { backgroundColor: arrowColor }]}>
+                            <MaterialCommunityIcons
+                                name="arrow-right"
+                                size={23}
+                            />
+                        </View>
+                    </Pressable>
+                </Animated.View>
+            </LinearGradient>
+        )
+    }
 
 const styles = StyleSheet.create({
     challangeCard: {

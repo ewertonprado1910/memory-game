@@ -4,6 +4,7 @@ import { interpolateColor, useAnimatedStyle, useSharedValue, withSpring, WithSpr
 import { SPRING_CONFIG } from "../config/animation.config"
 
 interface UserPressAnimationConfig {
+    scaleActive?: number
     springConfig?: WithSpringConfig
 }
 
